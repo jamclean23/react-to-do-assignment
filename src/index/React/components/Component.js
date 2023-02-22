@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 function InputField () {
 
     const [listItems, setListItems] = useState([]);
-    const [message, setMessage] = useState('');
+    const [message, setMessage] = useState('default');
 
     useEffect(onListItemsChange, [listItems]);
 
@@ -27,7 +27,10 @@ function InputField () {
 
     function clickEvent () {
         console.log('clicked');
-        setListItems(listItems.concat(<li key={'uniqueId' + listItems.length}>{message}</li>));
+        setListItems(listItems.concat(
+            <li key={'uniqueId' + listItems.length}>{message}
+                <button onClick={()=> { console.log('clicked' + listItems.length) }}>X</button>
+            </li>));
         setMessage('');
     }
 
