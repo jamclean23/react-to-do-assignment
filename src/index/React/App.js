@@ -5,7 +5,7 @@
 
 // React
 import React from 'react';
-import { Component }  from './components/Component.js';
+import { InputField, ListOutput }  from './components/Component.js';
 
 
 // ====== FUNCTIONS ======
@@ -14,8 +14,9 @@ import { Component }  from './components/Component.js';
 function App () {
     return (
         <div>
-            <h1>Content goes here</h1>
-            <Component />
+            <h1>Task List</h1>
+            <InputField />
+            <ListOutput />
         </div>
     );
 }
