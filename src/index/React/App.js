@@ -16,7 +16,6 @@ function App () {
         <div>
             <h1>Task List</h1>
             <InputField />
-            <ListOutput />
         </div>
     );
 }

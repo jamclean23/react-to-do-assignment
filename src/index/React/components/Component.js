@@ -1,35 +1,54 @@
 // Component Example
 
 // ====== IMPORTS ======
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 // ====== DEFINITION ======
 
 function InputField () {
 
+    const [listItems, setListItems] = useState([]);
+    const [message, setMessage] = useState('');
+
+    useEffect(onListItemsChange, [listItems]);
+
+    function onListItemsChange () {
+        if (listItems.length) {
+
+            // Log changes
+            console.log('Added: ' + listItems[listItems.length - 1]);
+            console.log(listItems); 
+        }
+    }
+
+    function inputChange (event) {
+        setMessage(event.target.value);
+    }
+
+    function clickEvent () {
+        console.log('clicked');
+        setListItems(listItems.concat(<li key={'uniqueId' + listItems.length}>{message}</li>));
+        setMessage('');
+    }
+
     return (
         <div>
-            <label for="userInput">Task: </label>
-            <input type="text" id="userInput"/>
+            <label htmlFor="userInput">Task: </label>
+            <input onChange={inputChange} type="text" id="userInput" value={message}/>
             <br></br>
-            <button>Submit</button>
+            <button onClick={clickEvent}>Submit</button>
+            <ListOutput listItems={listItems}/>
         </div>
     );
 }
 
-function ListOutput () {
-
-    let listItems = [];
-
-    for (let i = 0; i < 5; i++) {
-        listItems.push(<li>blah {i}</li>);
-    }
+function ListOutput (props) {
 
     return (
         <div>
             <h2>To-Do</h2>
             <ul>
-                {listItems}
+                {props.listItems}
             </ul>
         </div>
     );
