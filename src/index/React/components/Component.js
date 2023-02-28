@@ -19,13 +19,80 @@ function InputField () {
         generateListJsx();
     }
 
+    function startEdit (clickedId) {
+        setListItems(listItems.map((item) => {
+            if (item.key === clickedId) {
+                let newObj = {};
+                for (const prop in item) {
+                    if (prop === 'edit') {
+                        newObj.edit = true;
+                    } else {
+                        newObj[prop] = item[prop];
+                    }
+                }
+                return newObj;
+            } else {
+                return item;
+            }
+        }));
+    } 
+
+    function finishEdit (clickedId) {
+        setListItems(listItems.map((item) => {
+            if (item.key === clickedId) {
+                let newObj = {};
+                for (const prop in item) {
+                    if (prop === 'edit') {
+                        newObj.edit = false;
+                    } else {
+                        newObj[prop] = item[prop];
+                    }
+                }
+                return newObj;
+            } else {
+                return item;
+            }
+        }));
+    }
+
     function generateListJsx() {
         setJsxList(listItems.map((item, index) => {
+
+            let editButton = <button onClick={startEdit.bind(this, item.key)}>Edit</button>;
+            let contentField = item.content;
+
+            if (item.edit === true){
+                editButton = <button onClick={finishEdit.bind(this, item.key)}>Done</button>;
+                contentField = <input type="text" onChange={handleEditChange.bind(this, item.key)} value={item.content}/>;
+            } 
+
+
+            
+
             return (
-                <li key={item.key}>{index + 1}. {item.content}
+                <li key={item.key}>{index + 1}. {contentField}
                     <button onClick={deleteClick.bind(this, item.key)}>x</button>
+                    {editButton}
                 </li>
             );
+        }));
+    }
+
+    function handleEditChange (clickedId, event) {
+        setListItems(listItems.map((item) => {
+            if (item.key === clickedId) {
+                let newObj = {};
+                for (const prop in item) {
+                    if (prop === 'content') {
+                        newObj.content = event.target.value;
+                    } else {
+                        newObj[prop] = item[prop];
+                    }
+                }
+                return newObj;
+            } else {
+                return item;
+            }
         }));
     }
 
@@ -34,15 +101,17 @@ function InputField () {
     }
 
     function clickEvent () {
-        setListItems(listItems.concat({key: 'uniqueId' + uniqueId, content: message }));
+        setListItems(listItems.concat({
+            key: 'uniqueId' + uniqueId, 
+            content: message, 
+            edit: false,
+        }));
         setMessage('');
         setUniqueId(uniqueId + 1);
     }
 
     function deleteClick (clickedId, event) {
         setListItems(listItems.filter((item, index) => {
-            console.log('key: ' + item.key);
-            console.log('uniqueId: ' + clickedId);
             return item.key != clickedId;
         }));
     }
