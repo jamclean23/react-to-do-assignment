@@ -22,8 +22,8 @@ function InputField () {
     function generateListJsx() {
         setJsxList(listItems.map((item, index) => {
             return (
-                <li key={item.key}>{item.content}
-                    <button onClick={logItems}>x</button>
+                <li key={item.key}>{index + 1}. {item.content}
+                    <button onClick={deleteClick.bind(this, item.key)}>x</button>
                 </li>
             );
         }));
@@ -33,14 +33,18 @@ function InputField () {
         setMessage(event.target.value);
     }
 
-    function logItems () {
-        console.log(listItems);
-    }
-
     function clickEvent () {
         setListItems(listItems.concat({key: 'uniqueId' + uniqueId, content: message }));
         setMessage('');
         setUniqueId(uniqueId + 1);
+    }
+
+    function deleteClick (clickedId, event) {
+        setListItems(listItems.filter((item, index) => {
+            console.log('key: ' + item.key);
+            console.log('uniqueId: ' + clickedId);
+            return item.key != clickedId;
+        }));
     }
 
     return (
