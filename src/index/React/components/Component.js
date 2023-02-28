@@ -9,29 +9,38 @@ function InputField () {
 
     const [listItems, setListItems] = useState([]);
     const [message, setMessage] = useState('default');
+    const [uniqueId, setUniqueId] = useState(0);
+    const [jsxList, setJsxList] = useState(null);
 
     useEffect(onListItemsChange, [listItems]);
 
     function onListItemsChange () {
-        if (listItems.length) {
+        console.log(listItems);
+        generateListJsx();
+    }
 
-            // Log changes
-            console.log('Added: ' + listItems[listItems.length - 1]);
-            console.log(listItems); 
-        }
+    function generateListJsx() {
+        setJsxList(listItems.map((item, index) => {
+            return (
+                <li key={item.key}>{item.content}
+                    <button onClick={logItems}>x</button>
+                </li>
+            );
+        }));
     }
 
     function inputChange (event) {
         setMessage(event.target.value);
     }
 
+    function logItems () {
+        console.log(listItems);
+    }
+
     function clickEvent () {
-        console.log('clicked');
-        setListItems(listItems.concat(
-            <li key={'uniqueId' + listItems.length}>{message}
-                <button onClick={()=> { console.log('clicked' + listItems.length) }}>X</button>
-            </li>));
+        setListItems(listItems.concat({key: 'uniqueId' + uniqueId, content: message }));
         setMessage('');
+        setUniqueId(uniqueId + 1);
     }
 
     return (
@@ -40,19 +49,8 @@ function InputField () {
             <input onChange={inputChange} type="text" id="userInput" value={message}/>
             <br></br>
             <button onClick={clickEvent}>Submit</button>
-            <ListOutput listItems={listItems}/>
-        </div>
-    );
-}
-
-function ListOutput (props) {
-
-    return (
-        <div>
-            <h2>To-Do</h2>
-            <ul>
-                {props.listItems}
-            </ul>
+            <h2>To Do</h2>
+            {jsxList}
         </div>
     );
 }
@@ -61,6 +59,5 @@ function ListOutput (props) {
 // ====== EXPORTS ======
 
 export {
-    InputField,
-    ListOutput
+    InputField
 }

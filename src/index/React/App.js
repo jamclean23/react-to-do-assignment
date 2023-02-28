@@ -5,7 +5,7 @@
 
 // React
 import React from 'react';
-import { InputField, ListOutput }  from './components/Component.js';
+import { InputField }  from './components/Component.js';
 
 
 // ====== FUNCTIONS ======
